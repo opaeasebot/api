@@ -40,12 +40,13 @@ router.get("/callback", async (req, res) => {
     if (!code) return res.status(400).json({ message: "está faltando query", status: 400 });
 
     res.sendFile(path.join(__dirname, '../pages/dashboard.html'));
-
+    const redirectUri = `${config.url.replace(/\/$/, '')}/auth/callback`;
+    console.log(redirectUri)
     try {
         const token = await getTokens({
           code: code,
           grantType: "authorization_code",
-          redirectUri: `${config.url}/auth/callback`
+          redirectUri: redirectUri
         });
     
         const user = await getUserInfo(token.access_token);
